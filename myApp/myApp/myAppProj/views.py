@@ -3,10 +3,9 @@ from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
-    context = {
-        'name': 'Jon',
-        'age': 22,
-        'country': 'USA',
-        'city': 'Salt Lake City'
-    }
-    return render(request, 'index.html', context)   # Context will be sent to index.html in templates folder
+    return render(request, 'index.html')  
+
+def counter(request):
+    text = request.GET['text']  ## stores user input from index.html to text variable.
+    amountofWords = len(text.split())   ## Splits each unspaced combination of letters to words and counts them.
+    return render(request, 'counter.html', {'amount': amountofWords})   # custom key "amount" that stores the count of all words.
