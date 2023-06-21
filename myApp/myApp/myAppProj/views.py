@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from .models import Feature
 
 # Create your views here.
-def index(request):
-    feature1 = Feature()
+##def index(request): 
+"""  feature1 = Feature()
     feature1.id = 0
     feature1.name = 'Fast'
     feature1.is_true = True
@@ -31,6 +31,14 @@ def index(request):
     features = [feature1, feature2, feature3, feature4]
     
     return render(request, 'index.html', {'features': features})  
+    
+    SELF-NOTE: Since I created a model, migrated the database and created admin account in admin panel, I do 
+    not need these features anymore. As I can add features to the Feature() class from the admin panel.
+    """
+    
+def index(request):
+    features = Feature.objects.all()    # grab all objects from Feature() database and store in features variable.
+    return render(request, 'index.html', {'features': features})
 
 def counter(request):
     text = request.POST['text']  ## stores user input from index.html to text variable.
