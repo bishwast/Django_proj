@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Feature
+from django.contrib.auth.models import User, auth
+from django.contrib import messages
 
 # Create your views here.
 ##def index(request): 
@@ -39,6 +41,37 @@ from .models import Feature
 def index(request):
     features = Feature.objects.all()    # grab all objects from Feature() database and store in features variable.
     return render(request, 'index.html', {'features': features})
+
+def register(request):
+    
+    if request.method =='POST':
+        
+        # store the user inputed values in the register.html page in the following variables
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        password_r = request.POST['password_r']
+
+        if password == password_r:       # Only continue is both the password matches
+            if User.objects.filter(email=email).exists():
+                messages.info(request, "Email is already used!")
+                return redirect('register')     # Send to urlpatters path of register page
+            
+            elif User.objects.filter(username = username).exists():
+                messages.info(request, "Username is already taken, please try another username.")
+                return redirect('register')
+            
+            else:       # If conditions above are false then in User obj sign up the user
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user.save();
+                return redirect('login')
+            
+        else:
+            messages.info(request, "Passord does not match!")   # send user to re-register
+            return render('register')
+        
+    else:
+        return render(request, 'register.html')
 
 def counter(request):
     text = request.POST['text']  ## stores user input from index.html to text variable.
