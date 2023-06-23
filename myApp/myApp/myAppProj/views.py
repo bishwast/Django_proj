@@ -73,6 +73,26 @@ def register(request):
     else:
         return render(request, 'register.html')
 
+def login(request):
+    if request.method =='POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        user = auth.authenticate(username=username, password= password)
+        
+        if user is not None:    # If user is not in DB
+            auth.login(request, user)
+            return redirect('/')    # Redirect user to hopemage
+        else:
+            messages.info(request, "Credentials Invalid!")
+            return redirect('login')
+    else:
+        return render(request, 'login.html')
+
+def logout(request):
+    auth.logout(request)    # Logout user out of the page
+    return redirect('/')
+
 def counter(request):
     text = request.POST['text']  ## stores user input from index.html to text variable.
     amountofWords = len(text.split())   ## Splits each unspaced combination of letters to words and counts them.
