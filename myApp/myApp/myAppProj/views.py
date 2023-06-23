@@ -94,9 +94,8 @@ def logout(request):
     return redirect('/')
 
 def counter(request):
-    text = request.POST['text']  ## stores user input from index.html to text variable.
-    amountofWords = len(text.split())   ## Splits each unspaced combination of letters to words and counts them.
-    return render(request, 'counter.html', {'amount': amountofWords})   # custom key "amount" that stores the count of all words.
+    posts = [1,2,3,4,"John", "Tim", "Kim"]
+    return render(request, 'counter.html', {'posts': posts})   # custom key "post" that stores the count of all words.
 
 def post(request, pk):
     return render(request, 'post.html', {'pk': pk})
